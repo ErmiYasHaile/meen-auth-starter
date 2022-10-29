@@ -5,12 +5,18 @@ const sessionsRouter = express.Router()
 const User = require("../models/user.js")
 
 // New (login page)
-
+// New (login page)
 sessionsRouter.get("/new", (req, res) => {
-    res.render("sessions/new.ejs")
+    res.render("sessions/new.ejs", {
+      currentUser: req.session.currentUser,
+    })
   })
 // Delete (logout route)
-
+sessionsRouter.delete("/", (req, res) => {
+    req.session.destroy((error) => {
+      res.redirect("/")
+    })
+  })
 // Create (login route)
 // Create (login route)
 sessionsRouter.post("/", (req, res) => {
@@ -43,8 +49,8 @@ sessionsRouter.post("/", (req, res) => {
             // redirect back to our home page
             res.redirect("/")
 
-            res.send(`The current user is:${req.session.currentUser}`)
-            res.redirect("success")
+            // res.send(`The current user is:${req.session.currentUser}`)
+            // res.redirect("success")
           } else {
             // if the passwords don't match
             res.send("Oops! Invalid credentials.")
